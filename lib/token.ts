@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import global from "../util/global";
+import Global from "../util/global";
 export const jwtSign = () => {
   const key: string = process.env.API_KEY ?? "";
   const token = jwt.sign(
@@ -20,7 +20,7 @@ export const tokenVerify = (token: string) => {
   let valid = false;
   jwt.verify(token, key, (err, decoded) => {
     if (err) return (valid = false);
-    global.logger.info(decoded);
+    Global.logger.info(decoded);
     return (valid = true);
   });
 

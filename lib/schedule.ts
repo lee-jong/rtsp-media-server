@@ -2,7 +2,7 @@ import schedule from "node-schedule";
 import moment from "moment";
 import path, { join } from "path";
 import fs from "fs";
-import global from "../util/global";
+import Global from "../util/global";
 
 // Log File - 정시에 확인 후 제거
 schedule.scheduleJob("0 0 0 * * *", () => {
@@ -16,11 +16,11 @@ schedule.scheduleJob("0 0 0 * * *", () => {
         if (diffDay <= savePeriod) return;
         const filePath = path.join(dirPath, logFile);
         fs.unlink(filePath, (err) => {
-          if (err) global.logger.error(`${logFile} 로그 파일 제거 실패`);
+          if (err) Global.logger.error(`${logFile} 로그 파일 제거 실패`);
         });
       });
     });
   } catch (e) {
-    global.logger.error(`로그 파일 제거 중 실패`);
+    Global.logger.error(`로그 파일 제거 중 실패`);
   }
 });
