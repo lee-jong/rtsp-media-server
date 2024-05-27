@@ -1,5 +1,5 @@
 import express from "express";
-import rtsp from "./lib/rtsp";
+import Rtsp from "./lib/rtsp";
 import route from "./route/index";
 import interceptor from "./interceptor/index";
 import errorHandle from "./interceptor/error";
@@ -28,6 +28,8 @@ app.use(errorHandle);
 
 route(app);
 http.listen(port, () => {
-  rtsp.init();
+  // new Rtsp("rtsp://192.168.144.25:8554/main.264", 9999).init();
+  new Rtsp("rtsp://210.99.70.120:1935/live/cctv007.stream", 9999).init();
+  // new Rtsp("rtsp://210.99.70.120:1935/live/cctv005.stream", 9998).init();
   console.log(`connected at ${port}`);
 });

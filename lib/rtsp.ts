@@ -4,28 +4,33 @@ const retryTime = 1000 * 5;
 const reconTime = 1000 * 5;
 
 class RTSP {
-  constructor() {}
   IP: string = process.env.host ?? "";
   stream: any = undefined;
   onRetry: boolean = false;
   retryTimer: NodeJS.Timeout | undefined = undefined;
   reconTimer: NodeJS.Timeout | undefined = undefined;
+  #streamUrl: string;
+  #port: number;
+  constructor(streamUrl: string, port: number) {
+    this.#streamUrl = streamUrl;
+    this.#port = port;
+  }
 
   init = () => {
     try {
       const Stream = require("node-rtsp-stream");
       const ffmpegPath = require("ffmpeg-static");
-      const streamUrl = "rtsp://210.99.70.120:1935/live/cctv007.stream";
 
       this.stream = new Stream({
         name: "원격관람프로그램",
-        streamUrl,
-        wsPort: 9999,
+        streamUrl: this.#streamUrl,
+        wsPort: this.#port,
         ffmpegPath,
         ffmpegOptions: {
           "-stats": "",
         },
       });
+      if (this.stream.changeSpeed) this.stream.changeSpeed(0.5);
       this.stream.on("rtsp_socket_clients", (data: number) => {
         Global.rtspClients = data;
         Global.logger.info("[RTSP] Connect Clients", data);
@@ -93,4 +98,4 @@ class RTSP {
   };
 }
 
-export default new RTSP();
+export default RTSP;
